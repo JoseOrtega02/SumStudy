@@ -1,6 +1,6 @@
 import { IsummaryRepo } from 'src/summary/Infra/Repositories/IsummaryRepo'
-import { Summary } from '../Entities/Summary'
-import { SummaryCreator } from '../Entities/SummaryCreator'
+import { Summary } from '../../Domain/Entities/Summary'
+import { SummaryCreator } from '../../Domain/Entities/SummaryCreator'
 
 class createSummaryUC {
   constructor(private readonly repository: IsummaryRepo<Summary>) {}

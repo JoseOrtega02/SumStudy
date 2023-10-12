@@ -8,7 +8,4 @@ export class Summary implements Isummary {
 
   name: string
   id: number
-  changeName(name: string) {
-    this.name = name
-  }
 }
