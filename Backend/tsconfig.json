@@ -15,6 +15,6 @@
     "baseUrl": "."
     // ** base url will expain why it is useful later **
     },
-    "include": ["./src/**/*.ts", "./src/index.ts"],
+    "include": ["src/**/*.ts", "src/index.ts"],
     "exclude": ["node_modules", "src/**/*.spec.ts",   "src/**/__tests__/*.ts"]
     }
