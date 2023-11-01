@@ -5,11 +5,11 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
   private summaries: Summary[]
   private idCounter: number
   constructor() {
+    this.idCounter = 0
     this.summaries = [
-      { id: 1, name: 'Sumary 1' },
-      { id: 2, name: 'Sumary 2' }
+      { id: this.idCounter++, name: 'Sumary 1' },
+      { id: this.idCounter++, name: 'Sumary 2' }
     ]
-    this.idCounter = 1
   }
   getNextID(): number {
     return this.idCounter++
