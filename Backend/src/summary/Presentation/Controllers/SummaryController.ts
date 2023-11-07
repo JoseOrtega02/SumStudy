@@ -30,9 +30,9 @@ export function SummaryController() {
     // Manejo de error si req.body no contiene la propiedad 'name' cambiar
     //luego por zod
     if (typeof req.body === 'object' && 'name' in req.body) {
-      const name = (req.body as { name: string }).name
+      const { name, pdf, sum_desc, subject, career, lenght, up_date, likes } = req.body
       const useCase = new createSummaryUC(repositoryInstance)
-      const newItem = useCase.cresateSummary(name)
+      const newItem = useCase.cresateSummary(name, pdf, sum_desc, subject, career, lenght, up_date, likes)
       res.status(201).json(newItem)
     } else {
       // Manejo de error si req.body no contiene la propiedad 'name'
@@ -52,7 +52,7 @@ export function SummaryController() {
     const name = req.body.name
     const useCase = new UpdateSummaryUC(repositoryInstance)
     const updatedSummary = useCase.updateSummary(id, name)
-    if (updatedSummary !== -1) {
+    if (updatedSummary) {
       res.send('Elemento actualizado correctamente: ' + JSON.stringify(updatedSummary))
     } else res.status(404).json({ message: 'Elemento no encontrado' })
   })

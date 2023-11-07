@@ -1,10 +1,10 @@
 import { Summary } from 'src/summary/Domain/Entities/Summary'
-
+import { RowDataPacket } from 'mysql2'
 export interface IsummaryRepo<T> {
-  getNextID(): number
+  getNextID(): `${string}-${string}-${string}-${string}-${string}`
   create(data: Summary): void
-  getAll(): Summary[]
-  getOne(id: number): Summary | undefined
+  getAll(): Promise<RowDataPacket[]>
+  getOne(id: number): Promise<RowDataPacket>
   delete(id: number): number
-  update(id: number, name: string): Summary | number
+  update(id: number, name: string): Promise<RowDataPacket>
 }
