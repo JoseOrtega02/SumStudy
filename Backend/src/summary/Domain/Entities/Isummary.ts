@@ -1,6 +1,6 @@
 export interface Isummary {
   name: string
-  id: `${string}-${string}-${string}-${string}-${string}`
+  id: Buffer
   likes: number
   pdf: string
   sum_desc: string

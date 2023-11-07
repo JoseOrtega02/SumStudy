@@ -1,7 +1,7 @@
 import { Summary } from 'src/summary/Domain/Entities/Summary'
 import { RowDataPacket } from 'mysql2'
 export interface IsummaryRepo<T> {
-  getNextID(): `${string}-${string}-${string}-${string}-${string}`
+  getNextID(): Buffer
   create(data: Summary): void
   getAll(): Promise<RowDataPacket[]>
   getOne(id: number): Promise<RowDataPacket>

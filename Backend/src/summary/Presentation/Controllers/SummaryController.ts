@@ -34,6 +34,7 @@ export function SummaryController() {
     if (typeof req.body === 'object' && 'name' in req.body) {
       const { name, pdf, sum_desc, subject, career, lenght, up_date, likes } = req.body
       const useCase = new createSummaryUC(repositoryInstance)
+
       const newItem = useCase.cresateSummary(name, pdf, sum_desc, subject, career, lenght, up_date, likes)
       res.status(201).json(newItem)
     } else {

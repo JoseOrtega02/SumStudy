@@ -13,7 +13,7 @@ export class Summary implements Isummary {
     this.up_date = data.up_date
   }
   name: string
-  id: `${string}-${string}-${string}-${string}-${string}`
+  id: Buffer
   likes: number
   pdf: string
   sum_desc: string
