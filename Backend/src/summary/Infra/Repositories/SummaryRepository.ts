@@ -7,7 +7,8 @@ const access: ConnectionOptions = {
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'summary_db'
+  database: 'summary_db',
+  port: 3306
 }
 const connection = mysql.createPool(access)
 export default class SummaryRepository implements IsummaryRepo<Summary> {
@@ -15,8 +16,9 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
     return randomUUID()
   }
   async getAll() {
-    const sql = 'SELECT * FROM summary;'
+    const sql = 'SELECT * FROM Summaries;'
     const [rows] = await connection.execute<RowDataPacket[]>(sql)
+
     return rows
   }
   async create(sumary: Summary) {
