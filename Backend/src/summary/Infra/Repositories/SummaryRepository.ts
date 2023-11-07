@@ -12,17 +12,19 @@ const access: ConnectionOptions = {
 }
 const connection = mysql.createPool(access)
 export default class SummaryRepository implements IsummaryRepo<Summary> {
-  getNextID(): `${string}-${string}-${string}-${string}-${string}` {
-    return randomUUID()
+  getNextID(): Buffer {
+    const hex = randomUUID().replace(/-/g, '')
+    const buffer = Buffer.from(hex, 'hex')
+    return buffer
   }
   async getAll() {
     const sql = 'SELECT * FROM Summaries;'
     const [rows] = await connection.execute<RowDataPacket[]>(sql)
-
     return rows
   }
   async create(sumary: Summary) {
-    const sql = 'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,likes) VALUES(?, ?);'
+    const sql =
+      'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,likes) VALUES(?, ?,?, ?, ?, ?, ?, ?, ?);'
     const values = [
       sumary.id,
       sumary.name,
