@@ -13,7 +13,9 @@ export function SummaryController() {
   router.get('/', (req, res) => {
     const useCase = new getAllSummariesUC(repositoryInstance)
     const items = useCase.getAllSumaries()
-    res.json(items)
+    items.then((items) => {
+      res.json(items)
+    })
   })
   router.get('/:id', (req, res) => {
     const id = parseInt(req.params.id)
