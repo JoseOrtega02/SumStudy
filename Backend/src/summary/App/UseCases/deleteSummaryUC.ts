@@ -3,7 +3,7 @@ import { IsummaryRepo } from 'src/summary/Infra/Repositories/IsummaryRepo'
 
 export class deleteSummaryUC {
   constructor(private readonly repository: IsummaryRepo<Summary>) {}
-  deleteSummary(id: number) {
+  deleteSummary(id: string) {
     return this.repository.delete(id)
   }
 }

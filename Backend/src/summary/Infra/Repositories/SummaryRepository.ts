@@ -1,7 +1,7 @@
 import { Summary } from 'src/summary/Domain/Entities/Summary'
 import { IsummaryRepo } from './IsummaryRepo'
 import mysql, { ConnectionOptions, RowDataPacket } from 'mysql2/promise'
-import { randomUUID } from 'crypto'
+import { UUID, randomUUID } from 'crypto'
 
 const access: ConnectionOptions = {
   host: 'localhost',
@@ -18,7 +18,7 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
     return buffer
   }
   async getAll() {
-    const sql = 'SELECT * FROM Summaries;'
+    const sql = 'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes FROM Summaries;'
     const [rows] = await connection.execute<RowDataPacket[]>(sql)
     return rows
   }
@@ -38,16 +38,22 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
     ]
     await connection.execute(sql, values)
   }
-  async getOne(id: number) {
-    const sql = 'SELECT * FROM Summaries WHERE id = ?;'
+  async getOne(id: string) {
+    const sql =
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes FROM Summaries WHERE id = UUID_TO_BIN(?);'
     const values = [id]
     const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
+
     return rows[0]
   }
-  delete(id: number): number {
-    const sql = 'DELETE FROM Summaries WHERE id = ?;'
-    const values = [id]
-    connection.execute(sql, values)
+  delete(id: string): string {
+    try {
+      const sql = 'DELETE FROM Summaries WHERE id = UUID_TO_BIN(?);'
+      const values = [id]
+      connection.execute(sql, values)
+    } catch (error) {
+      console.log(error)
+    }
     return id
   }
   async update(id: number, name: string) {

@@ -7,6 +7,7 @@ import createSummaryUC from 'src/summary/App/UseCases/createSummaryUC'
 import { getSummaryByIdUC } from 'src/summary/App/UseCases/getSummaryBiIdUC'
 import { deleteSummaryUC } from 'src/summary/App/UseCases/deleteSummaryUC'
 import { UpdateSummaryUC } from 'src/summary/App/UseCases/updateSummaryUC'
+import { UUID } from 'crypto'
 export function SummaryController() {
   const repositoryInstance: IsummaryRepo<Summary> = new SummaryRepository()
   const router = express.Router()
@@ -18,11 +19,13 @@ export function SummaryController() {
     })
   })
   router.get('/:id', (req, res) => {
-    const id = parseInt(req.params.id)
+    const id = req.params.id //req.params.id
     const useCase = new getSummaryByIdUC(repositoryInstance)
     const item = useCase.getSummaryById(id)
     if (item) {
-      res.json(item)
+      item.then((item) => {
+        res.json(item)
+      })
     } else {
       res.status(404).json({ message: 'Elemento no encontrado' })
     }
@@ -43,10 +46,10 @@ export function SummaryController() {
     }
   })
   router.delete('/:id', (req, res) => {
-    const id = parseInt(req.params.id)
+    const id = req.params.id
     const useCase = new deleteSummaryUC(repositoryInstance)
     const deletedSummary = useCase.deleteSummary(id)
-    if (deletedSummary !== -1) {
+    if (deletedSummary !== undefined) {
       res.send('Elemento borrado correctamente')
     } else res.status(404).json({ message: 'Elemento no encontrado' })
   })
