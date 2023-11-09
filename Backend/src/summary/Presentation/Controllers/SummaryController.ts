@@ -8,6 +8,7 @@ import { getSummaryByIdUC } from 'src/summary/App/UseCases/getSummaryBiIdUC'
 import { deleteSummaryUC } from 'src/summary/App/UseCases/deleteSummaryUC'
 import { UpdateSummaryUC } from 'src/summary/App/UseCases/updateSummaryUC'
 import { UUID } from 'crypto'
+import { IDSummarySchemaValidation } from 'src/summary/Infra/Validations/IDSchemaValidation'
 export function SummaryController() {
   const repositoryInstance: IsummaryRepo<Summary> = new SummaryRepository()
   const router = express.Router()
@@ -21,9 +22,10 @@ export function SummaryController() {
   router.get('/:id', (req, res) => {
     const id = req.params.id //req.params.id
     const useCase = new getSummaryByIdUC(repositoryInstance)
-    const item = useCase.getSummaryById(id)
-    if (item) {
-      item.then((item) => {
+    const validation = IDSummarySchemaValidation.safeParse({ id: id })
+    if (validation.success) {
+      const item = useCase.getSummaryById(validation.data.id)
+      item?.then((item) => {
         res.json(item)
       })
     } else {
