@@ -9,6 +9,7 @@ import { deleteSummaryUC } from 'src/summary/App/UseCases/deleteSummaryUC'
 import { UpdateSummaryUC } from 'src/summary/App/UseCases/updateSummaryUC'
 import { UUID } from 'crypto'
 import { IDSummarySchemaValidation } from 'src/summary/Infra/Validations/IDSchemaValidation'
+import { UploadSummarySchemaValidation } from 'src/summary/Infra/Validations/UploadSchemaValidation'
 export function SummaryController() {
   const repositoryInstance: IsummaryRepo<Summary> = new SummaryRepository()
   const router = express.Router()
@@ -34,33 +35,41 @@ export function SummaryController() {
   })
 
   router.post('/', (req, res) => {
-    // Manejo de error si req.body no contiene la propiedad 'name' cambiar
-    //luego por zod
-    if (typeof req.body === 'object' && 'name' in req.body) {
-      const { name, pdf, sum_desc, subject, career, lenght, up_date, likes } = req.body
+    const validation = UploadSummarySchemaValidation.safeParse(req.body)
+    if (validation.success) {
       const useCase = new createSummaryUC(repositoryInstance)
-
-      const newItem = useCase.cresateSummary(name, pdf, sum_desc, subject, career, lenght, up_date, likes)
+      const newItem = useCase.cresateSummary(
+        validation.data.name,
+        validation.data.pdf,
+        validation.data.sum_desc,
+        validation.data.subject,
+        validation.data.career,
+        validation.data.lenght,
+        validation.data.up_date,
+        validation.data.likes
+      )
       res.status(201).json(newItem)
     } else {
-      // Manejo de error si req.body no contiene la propiedad 'name'
       res.status(400).json({ error: 'El cuerpo de la solicitud no es válido' })
     }
   })
+
   router.delete('/:id', (req, res) => {
     const id = req.params.id
-    const useCase = new deleteSummaryUC(repositoryInstance)
-    const deletedSummary = useCase.deleteSummary(id)
-    if (deletedSummary !== undefined) {
+    const validation = IDSummarySchemaValidation.safeParse({ id: id })
+    if (validation.success) {
+      const useCase = new deleteSummaryUC(repositoryInstance)
+      const deletedSummary = useCase.deleteSummary(id)
       res.send('Elemento borrado correctamente')
     } else res.status(404).json({ message: 'Elemento no encontrado' })
   })
+
   router.post('/:id', (req, res) => {
-    const id = parseInt(req.params.id)
-    const name = req.body.name
-    const useCase = new UpdateSummaryUC(repositoryInstance)
-    const updatedSummary = useCase.updateSummary(id, name)
-    if (updatedSummary) {
+    const id = req.params.id
+    const validation = IDSummarySchemaValidation.safeParse({ id: id })
+    if (validation.success && req.body.name) {
+      const useCase = new UpdateSummaryUC(repositoryInstance)
+      const updatedSummary = useCase.updateSummary(validation.data.id, req.body.name)
       res.send('Elemento actualizado correctamente: ' + JSON.stringify(updatedSummary))
     } else res.status(404).json({ message: 'Elemento no encontrado' })
   })

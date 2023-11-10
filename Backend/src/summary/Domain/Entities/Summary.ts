@@ -1,3 +1,4 @@
+import { UUID } from 'crypto'
 import { Isummary } from './Isummary'
 
 export class Summary implements Isummary {
@@ -13,7 +14,7 @@ export class Summary implements Isummary {
     this.up_date = data.up_date
   }
   name: string
-  id: Buffer
+  id: UUID
   likes: number
   pdf: string
   sum_desc: string
