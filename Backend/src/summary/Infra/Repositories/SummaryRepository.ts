@@ -12,10 +12,8 @@ const access: ConnectionOptions = {
 }
 const connection = mysql.createPool(access)
 export default class SummaryRepository implements IsummaryRepo<Summary> {
-  getNextID(): Buffer {
-    const hex = randomUUID().replace(/-/g, '')
-    const buffer = Buffer.from(hex, 'hex')
-    return buffer
+  getNextID(): UUID {
+    return randomUUID()
   }
   async getAll() {
     const sql = 'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes FROM Summaries;'
@@ -24,7 +22,7 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
   }
   async create(sumary: Summary) {
     const sql =
-      'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,likes) VALUES(?, ?,?, ?, ?, ?, ?, ?, ?);'
+      'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,likes) VALUES(UUID_TO_BIN(?), ?,?, ?, ?, ?, ?, ?, ?);'
     const values = [
       sumary.id,
       sumary.name,
@@ -56,8 +54,8 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
     }
     return id
   }
-  async update(id: number, name: string) {
-    const sql = 'UPDATE Summaries SET name = ? WHERE id = ?;'
+  async update(id: string, name: string) {
+    const sql = 'UPDATE Summaries SET name = ? WHERE id = UUID_TO_BIN(?);'
     const values = [name, id]
     const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
     return rows[0]

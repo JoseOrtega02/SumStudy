@@ -1,6 +1,8 @@
+import { UUID } from 'crypto'
+
 export interface Isummary {
   name: string
-  id: Buffer
+  id: UUID
   likes: number
   pdf: string
   sum_desc: string
