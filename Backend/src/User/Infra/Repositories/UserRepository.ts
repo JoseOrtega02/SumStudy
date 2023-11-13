@@ -31,16 +31,17 @@ export class UserRepository implements IUserRepository<User> {
   getAll(): User[] {
     return this.Users
   }
-  getOne(id: number): User | undefined {
-    const UserIndex = this.Users.findIndex((user) => user.id === id)
+  getOne(id: string): User | undefined {
+    const UserIndex = this.Users.findIndex((user) => user.id === parseInt(id))
     return this.Users[UserIndex]
   }
-  delete(id: number): number {
-    const UserIndex = this.Users.findIndex((user) => user.id === id)
+  delete(id: string): number {
+    const UserIndex = this.Users.findIndex((user) => user.id === parseInt(id))
     this.Users.splice(UserIndex, 1)
     return UserIndex
   }
-  update(id: number, name: string, password: string): number | User {
+  update(data: User): number | User {
+    const { id, name, password } = data
     const UserIndex = this.Users.findIndex((user) => user.id === id)
     if (UserIndex !== -1) {
       this.Users[UserIndex].name = name
