@@ -4,7 +4,7 @@ export interface IUserRepository<T> {
   getNextID(): number
   create(data: User): void
   getAll(): User[]
-  getOne(id: number): User | undefined
-  delete(id: number): number
-  update(id: number, name: string, password: string): User | number
+  getOne(id: string): User | undefined
+  delete(id: string): number
+  update(data: User): User | number
 }
