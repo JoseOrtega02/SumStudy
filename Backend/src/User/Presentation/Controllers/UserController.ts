@@ -6,6 +6,8 @@ import { UpdateUseCase } from 'src/User/App/UseCases/UpdateUseCase'
 import { Iuser } from 'src/User/Domain/Entities/Iuser'
 import { User } from 'src/User/Domain/Entities/User'
 import { IUserRepository } from 'src/User/Infra/Repositories/IUserRepository'
+import { IDUserSchemaValidation } from 'src/User/Infra/Validations/IDSchemaValidation'
+import { UploadUserSchemaValidation } from 'src/User/Infra/Validations/UploadSchemaValidation'
 
 export class UserController {
   public async getAllUsers(repositoryInstance: IUserRepository<User>) {
@@ -15,26 +17,46 @@ export class UserController {
   }
 
   public async getOne(id: string, repositoryInstance: IUserRepository<User>) {
-    const useCase = new GetOneUseCase(repositoryInstance)
-    const user = useCase.getOne(id)
-    return user
+    const validation = IDUserSchemaValidation.safeParse({ id })
+    if (validation.success) {
+      const useCase = new GetOneUseCase(repositoryInstance)
+      const user = useCase.getOne(id)
+      return user
+    } else {
+      return validation.error
+    }
   }
 
   public async createUser(data: Iuser, repositoryInstance: IUserRepository<User>) {
-    const usecase = new CreateUseCase(repositoryInstance)
-    const user = usecase.createUser(data)
-    return user
+    const validation = UploadUserSchemaValidation.safeParse(data)
+    if (validation.success) {
+      const usecase = new CreateUseCase(repositoryInstance)
+      const user = usecase.createUser(data)
+      return user
+    } else {
+      return validation.error
+    }
   }
 
   public async deleteUser(id: string, repositoryInstance: IUserRepository<User>) {
-    const usecase = new DeleteUseCase(repositoryInstance)
-    const deletedUser = usecase.delete(id)
-    return deletedUser
+    const validation = IDUserSchemaValidation.safeParse({ id })
+    if (validation.success) {
+      const usecase = new DeleteUseCase(repositoryInstance)
+      const deletedUser = usecase.delete(id)
+      return deletedUser
+    } else {
+      return validation.error
+    }
   }
 
   public async updateUser(data: Iuser, repositoryInstance: IUserRepository<User>) {
-    const usecase = new UpdateUseCase(repositoryInstance)
-    const updatedUser = usecase.update(data)
-    return updatedUser
+    const validation = UploadUserSchemaValidation.safeParse(data)
+    if (validation.success) {
+      const usecase = new UpdateUseCase(repositoryInstance)
+      const updatedUser = usecase.update(data)
+      return updatedUser
+    } else {
+      return validation.error
+    }
   }
 }
