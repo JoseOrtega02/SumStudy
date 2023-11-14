@@ -1,3 +1,4 @@
+import { UUID } from 'crypto'
 import { Iuser } from './Iuser'
 
 export class User {
@@ -8,7 +9,7 @@ export class User {
     this.password = data.password
   }
   name: string
-  id: number
+  id: UUID
   email: string
   password: string
 }

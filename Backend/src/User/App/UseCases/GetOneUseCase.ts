@@ -4,7 +4,7 @@ import { IUserRepository } from 'src/User/Infra/Repositories/IUserRepository'
 export class GetOneUseCase {
   constructor(private readonly repository: IUserRepository<User>) {}
 
-  public getOne(id: string): User | undefined {
+  public getOne(id: string) {
     return this.repository.getOne(id)
   }
 }
