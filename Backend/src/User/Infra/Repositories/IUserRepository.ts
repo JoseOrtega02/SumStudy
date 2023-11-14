@@ -1,10 +1,12 @@
+import { UUID } from 'crypto'
+import { FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2'
 import { User } from 'src/User/Domain/Entities/User'
 
 export interface IUserRepository<T> {
-  getNextID(): number
+  getNextID(): UUID
   create(data: User): void
-  getAll(): User[]
-  getOne(id: string): User | undefined
-  delete(id: string): number
-  update(data: User): User | number
+  getAll(): Promise<RowDataPacket[]>
+  getOne(id: string): Promise<RowDataPacket>
+  delete(id: string): Promise<[ResultSetHeader, FieldPacket[]]>
+  update(data: User): Promise<[ResultSetHeader, FieldPacket[]]>
 }

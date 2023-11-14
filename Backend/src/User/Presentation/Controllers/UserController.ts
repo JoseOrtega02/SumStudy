@@ -13,7 +13,7 @@ export class UserController {
   public async getAllUsers(repositoryInstance: IUserRepository<User>) {
     const useCase = new GetAllUseCase(repositoryInstance)
     const Users = useCase.getAll()
-    return Users
+    return await Users
   }
 
   public async getOne(id: string, repositoryInstance: IUserRepository<User>) {
@@ -42,8 +42,8 @@ export class UserController {
     const validation = IDUserSchemaValidation.safeParse({ id })
     if (validation.success) {
       const usecase = new DeleteUseCase(repositoryInstance)
-      const deletedUser = usecase.delete(id)
-      return deletedUser
+      const deletedUser = await usecase.delete(id)
+      return { afectedRows: deletedUser[0].affectedRows }
     } else {
       return validation.error
     }
@@ -53,8 +53,8 @@ export class UserController {
     const validation = UploadUserSchemaValidation.safeParse(data)
     if (validation.success) {
       const usecase = new UpdateUseCase(repositoryInstance)
-      const updatedUser = usecase.update(data)
-      return updatedUser
+      const updatedUser = await usecase.update(data)
+      return { afectedRows: updatedUser[0].affectedRows }
     } else {
       return validation.error
     }

@@ -1,54 +1,47 @@
 import { User } from 'src/User/Domain/Entities/User'
 import { IUserRepository } from './IUserRepository'
 import { UserCreator } from 'src/User/Domain/Entities/UserCreator'
+import mysql, { ConnectionOptions, FieldPacket, ResultSetHeader, RowDataPacket } from 'mysql2/promise'
+import { UUID, randomUUID } from 'crypto'
 
+const access: ConnectionOptions = {
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'summary_db',
+  port: 3306
+}
+const connection = mysql.createPool(access)
 export class UserRepository implements IUserRepository<User> {
-  private Users: User[]
-  private idCounter: number
-  constructor() {
-    this.idCounter = 0
-    this.Users = [
-      {
-        id: this.idCounter++,
-        name: 'jose',
-        email: 'jose',
-        password: 'jose'
-      },
-      {
-        id: this.idCounter++,
-        name: 'jose2',
-        email: 'jose2',
-        password: 'jose2'
-      }
-    ]
-  }
-  getNextID(): number {
-    return this.idCounter++
+  getNextID(): UUID {
+    return randomUUID()
   }
   create(data: User): void {
-    this.Users.push(data)
+    const sql = 'INSERT INTO Users (id, name, email, password) VALUES (UUID_TO_BIN(?), ?, ?, ?);'
+    const values = [data.id, data.name, data.email, data.password]
+    connection.execute(sql, values)
   }
-  getAll(): User[] {
-    return this.Users
+  async getAll() {
+    const sql = 'SELECT BIN_TO_UUID(id) as id, name, email, password FROM Users;'
+    const [rows] = await connection.execute<RowDataPacket[]>(sql)
+    return rows
   }
-  getOne(id: string): User | undefined {
-    const UserIndex = this.Users.findIndex((user) => user.id === parseInt(id))
-    return this.Users[UserIndex]
+  async getOne(id: string) {
+    const sql = 'SELECT BIN_TO_UUID(id) as id, name, email, password FROM Users WHERE id = UUID_TO_BIN(?);'
+    const values = [id]
+    const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
+    return rows[0]
   }
-  delete(id: string): number {
-    const UserIndex = this.Users.findIndex((user) => user.id === parseInt(id))
-    this.Users.splice(UserIndex, 1)
-    return UserIndex
+  async delete(id: string) {
+    const sql = 'DELETE FROM Users WHERE id = UUID_TO_BIN(?);'
+    const values = [id]
+    const result: [ResultSetHeader, FieldPacket[]] = await connection.execute<ResultSetHeader>(sql, values)
+    return result
   }
-  update(data: User): number | User {
-    const { id, name, password } = data
-    const UserIndex = this.Users.findIndex((user) => user.id === id)
-    if (UserIndex !== -1) {
-      this.Users[UserIndex].name = name
-      this.Users[UserIndex].password = password
-      return this.Users[UserIndex]
-    } else {
-      return UserIndex
-    }
+  async update(data: User) {
+    const sql = 'UPDATE Users SET name = ?, email = ?, password = ? WHERE id = UUID_TO_BIN(?);'
+    const values = [data.name, data.email, data.password, data.id]
+    const result: [ResultSetHeader, FieldPacket[]] = await connection.execute<ResultSetHeader>(sql, values)
+    return result
   }
 }
