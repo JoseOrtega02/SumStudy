@@ -8,5 +8,5 @@ export interface IUserRepository<T> {
   getAll(): Promise<RowDataPacket[]>
   getOne(id: string): Promise<RowDataPacket>
   delete(id: string): Promise<[ResultSetHeader, FieldPacket[]]>
-  update(data: User): Promise<[ResultSetHeader, FieldPacket[]]>
+  update(data: User, id: string): Promise<[ResultSetHeader, FieldPacket[]]>
 }
