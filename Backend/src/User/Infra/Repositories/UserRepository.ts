@@ -38,9 +38,9 @@ export class UserRepository implements IUserRepository<User> {
     const result: [ResultSetHeader, FieldPacket[]] = await connection.execute<ResultSetHeader>(sql, values)
     return result
   }
-  async update(data: User) {
+  async update(data: User, id: string) {
     const sql = 'UPDATE Users SET name = ?, email = ?, password = ? WHERE id = UUID_TO_BIN(?);'
-    const values = [data.name, data.email, data.password, data.id]
+    const values = [data.name, data.email, data.password, id]
     const result: [ResultSetHeader, FieldPacket[]] = await connection.execute<ResultSetHeader>(sql, values)
     return result
   }

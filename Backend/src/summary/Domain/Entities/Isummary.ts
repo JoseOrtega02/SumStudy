@@ -10,4 +10,5 @@ export interface Isummary {
   career: string
   lenght: number
   up_date: string
+  author_Id: string
 }

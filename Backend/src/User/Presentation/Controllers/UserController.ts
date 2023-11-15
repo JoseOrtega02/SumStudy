@@ -49,11 +49,11 @@ export class UserController {
     }
   }
 
-  public async updateUser(data: Iuser, repositoryInstance: IUserRepository<User>) {
+  public async updateUser(data: Iuser, id: string, repositoryInstance: IUserRepository<User>) {
     const validation = UploadUserSchemaValidation.safeParse(data)
     if (validation.success) {
       const usecase = new UpdateUseCase(repositoryInstance)
-      const updatedUser = await usecase.update(data)
+      const updatedUser = await usecase.update(data, id)
       return { afectedRows: updatedUser[0].affectedRows }
     } else {
       return validation.error

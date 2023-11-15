@@ -35,13 +35,14 @@ export function UserHandler() {
     const paginator = controller.deleteUser(id, repositoryInstance).then((paginator) => {
       if (paginator instanceof Error) res.status(404).json({ paginator })
       else if (paginator.afectedRows === 0) res.status(404).json({ message: 'Elemento no encontrado' })
-      else res.json(paginator)
+      else if (paginator.afectedRows === 1) res.json({ message: 'Elemento eliminado' })
     })
   })
 
   router.post('/:id', (req, res) => {
+    const id = req.params.id
     const data = req.body
-    const paginator = controller.updateUser(data, repositoryInstance).then((updatedUser) => {
+    const paginator = controller.updateUser(data, id, repositoryInstance).then((updatedUser) => {
       if (updatedUser instanceof Error) res.status(404).json({ paginator })
       else if (updatedUser?.afectedRows === 0) res.status(404).json({ message: 'Elemento no encontrado' })
       else if (updatedUser?.afectedRows === 1) res.json('Elemento actualizado')

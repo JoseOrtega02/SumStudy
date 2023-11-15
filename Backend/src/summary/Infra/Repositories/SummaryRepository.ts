@@ -16,13 +16,22 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
     return randomUUID()
   }
   async getAll() {
-    const sql = 'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes FROM Summaries;'
+    const sql =
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries;'
     const [rows] = await connection.execute<RowDataPacket[]>(sql)
+    return rows
+  }
+
+  async getSummariesByAuthorId(id: string) {
+    const sql =
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE author_Id = UUID_TO_BIN(?);'
+    const values = [id]
+    const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
     return rows
   }
   async create(sumary: Summary) {
     const sql =
-      'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,likes) VALUES(UUID_TO_BIN(?), ?,?, ?, ?, ?, ?, ?, ?);'
+      'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id) VALUES(UUID_TO_BIN(?), ?,?, ?, ?, ?, ?, ?, ?,?);'
     const values = [
       sumary.id,
       sumary.name,
@@ -32,13 +41,14 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
       sumary.pdf,
       sumary.career,
       sumary.subject,
-      sumary.likes
+      sumary.likes,
+      sumary.author_Id
     ]
     await connection.execute(sql, values)
   }
   async getOne(id: string) {
     const sql =
-      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes FROM Summaries WHERE id = UUID_TO_BIN(?);'
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE id = UUID_TO_BIN(?);'
     const values = [id]
     const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
 
