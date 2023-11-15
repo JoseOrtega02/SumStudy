@@ -15,6 +15,9 @@ export class SummaryController {
     const items = useCase.getAllSumaries()
     return await items
   }
+  //to do : add pagination, sort and filter
+  //to do : add search summaries
+  //to do : add summaries by author
   public async getSummaryById(id: string, repositoryInstance: IsummaryRepo<Summary>) {
     const useCase = new getSummaryByIdUC(repositoryInstance)
     const validation = IDSummarySchemaValidation.safeParse({ id })

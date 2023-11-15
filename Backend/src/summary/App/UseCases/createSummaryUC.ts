@@ -1,6 +1,7 @@
 import { IsummaryRepo } from 'src/summary/Infra/Repositories/IsummaryRepo'
 import { Summary } from '../../Domain/Entities/Summary'
 import { SummaryCreator } from '../../Domain/Entities/SummaryCreator'
+import { UUID } from 'crypto'
 
 interface data {
   name: string
@@ -11,6 +12,7 @@ interface data {
   lenght: number
   up_date: string
   likes: number
+  author_Id: string
 }
 
 class createSummaryUC {

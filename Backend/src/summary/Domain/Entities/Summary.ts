@@ -12,6 +12,7 @@ export class Summary implements Isummary {
     this.career = data.career
     this.lenght = data.lenght
     this.up_date = data.up_date
+    this.author_Id = data.author_Id
   }
   name: string
   id: UUID
@@ -22,4 +23,5 @@ export class Summary implements Isummary {
   career: string
   lenght: number
   up_date: string
+  author_Id: string
 }

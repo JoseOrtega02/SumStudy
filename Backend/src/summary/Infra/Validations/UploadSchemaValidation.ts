@@ -8,5 +8,6 @@ export const UploadSummarySchemaValidation = z.object({
   career: z.string(),
   lenght: z.number(),
   up_date: z.string(),
-  likes: z.number()
+  likes: z.number(),
+  author_Id: z.string().uuid()
 })
