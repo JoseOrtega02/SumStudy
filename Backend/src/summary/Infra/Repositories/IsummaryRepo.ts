@@ -9,4 +9,5 @@ export interface IsummaryRepo<T> {
   delete(id: string): Promise<[ResultSetHeader, FieldPacket[]]>
   update(id: string, name: string): Promise<[ResultSetHeader, FieldPacket[]]>
   getSummariesByAuthorId(id: string): Promise<RowDataPacket[]>
+  searchSummaries(name: string): Promise<RowDataPacket[]>
 }

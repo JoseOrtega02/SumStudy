@@ -9,7 +9,28 @@ export function SummaryHandler() {
   const router = express.Router()
 
   router.get('/', (req, res) => {
-    const paginator = controller.getAllSumaries(repositoryInstance)
+    let name: string
+
+    if (typeof req.query.searchTerm === 'string') {
+      name = req.query.searchTerm
+    } else {
+      name = ''
+    }
+
+    let paginator
+    if (name !== '') {
+      paginator = controller.searchSummaries(name, repositoryInstance)
+    } else {
+      paginator = controller.getAllSumaries(repositoryInstance)
+    }
+    paginator.then((paginator) => {
+      res.json(paginator)
+    })
+  })
+
+  router.get('/author/:id', (req, res) => {
+    const id = req.params.id
+    const paginator = controller.getSummariesByAuthorId(id, repositoryInstance)
     paginator.then((paginator) => {
       res.json(paginator)
     })
@@ -23,7 +44,6 @@ export function SummaryHandler() {
       if (paginator instanceof Error) res.status(404).json({ paginator })
       else if (paginator === undefined) res.status(404).json({ message: 'Elemento no encontrado' })
       else res.json(paginator)
-      console.log(paginator)
     })
   })
 
