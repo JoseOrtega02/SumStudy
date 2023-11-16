@@ -21,10 +21,17 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
     const [rows] = await connection.execute<RowDataPacket[]>(sql)
     return rows
   }
+  async searchSummaries(name: string) {
+    const sql =
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE name LIKE ?;'
+    const values = [`%${name}%`]
+    const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
+    return rows
+  }
 
   async getSummariesByAuthorId(id: string) {
     const sql =
-      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE author_Id = UUID_TO_BIN(?);'
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE author_Id = (?);'
     const values = [id]
     const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
     return rows

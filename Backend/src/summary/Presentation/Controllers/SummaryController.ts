@@ -1,7 +1,9 @@
 import { getAllSummariesUC } from 'src/summary/App/UseCases/GetAllSummariesUC'
 import createSummaryUC from 'src/summary/App/UseCases/createSummaryUC'
 import { deleteSummaryUC } from 'src/summary/App/UseCases/deleteSummaryUC'
+import { getSummariesofAuthorUC } from 'src/summary/App/UseCases/getSummariesofAuthorUC'
 import { getSummaryByIdUC } from 'src/summary/App/UseCases/getSummaryBiIdUC'
+import { searchSummariesUC } from 'src/summary/App/UseCases/searchSummaryUC'
 import { UpdateSummaryUC } from 'src/summary/App/UseCases/updateSummaryUC'
 import { Isummary } from 'src/summary/Domain/Entities/Isummary'
 import { Summary } from 'src/summary/Domain/Entities/Summary'
@@ -15,9 +17,18 @@ export class SummaryController {
     const items = useCase.getAllSumaries()
     return await items
   }
-  //to do : add pagination, sort and filter
-  //to do : add search summaries
-  //to do : add summaries by author
+  public async searchSummaries(name: string, repositoryInstance: IsummaryRepo<Summary>) {
+    const useCase = new searchSummariesUC(repositoryInstance)
+    const items = useCase.getAllSumaries(name)
+    return await items
+  }
+
+  public async getSummariesByAuthorId(id: string, repositoryInstance: IsummaryRepo<Summary>) {
+    const useCase = new getSummariesofAuthorUC(repositoryInstance)
+    const items = useCase.getAllSumaries(id)
+    return await items
+  }
+
   public async getSummaryById(id: string, repositoryInstance: IsummaryRepo<Summary>) {
     const useCase = new getSummaryByIdUC(repositoryInstance)
     const validation = IDSummarySchemaValidation.safeParse({ id })
