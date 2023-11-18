@@ -15,10 +15,10 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
   getNextID(): UUID {
     return randomUUID()
   }
-  async getAll() {
+  async getAll(limit: string) {
     const sql =
-      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries;'
-    const [rows] = await connection.execute<RowDataPacket[]>(sql)
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries LIMIT ?;'
+    const [rows] = await connection.execute<RowDataPacket[]>(sql, [limit])
     return rows
   }
   async searchSummaries(name: string) {
