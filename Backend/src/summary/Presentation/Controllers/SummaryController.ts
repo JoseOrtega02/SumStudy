@@ -12,8 +12,8 @@ import { IDSummarySchemaValidation } from 'src/summary/Infra/Validations/IDSchem
 import { UploadSummarySchemaValidation } from 'src/summary/Infra/Validations/UploadSchemaValidation'
 
 export class SummaryController {
-  public async getAllSumaries(repositoryInstance: IsummaryRepo<Summary>) {
-    const useCase = new getAllSummariesUC(repositoryInstance)
+  public async getAllSumaries(repositoryInstance: IsummaryRepo<Summary>, limit: string) {
+    const useCase = new getAllSummariesUC(repositoryInstance, limit)
     const items = useCase.getAllSumaries()
     return await items
   }
