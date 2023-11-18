@@ -13,8 +13,8 @@ import { UploadSummarySchemaValidation } from 'src/summary/Infra/Validations/Upl
 
 export class SummaryController {
   public async getAllSumaries(repositoryInstance: IsummaryRepo<Summary>, limit: string) {
-    const useCase = new getAllSummariesUC(repositoryInstance, limit)
-    const items = useCase.getAllSumaries()
+    const useCase = new getAllSummariesUC(repositoryInstance)
+    const items = useCase.getAllSumaries(limit)
     return await items
   }
   public async searchSummaries(name: string, repositoryInstance: IsummaryRepo<Summary>) {
