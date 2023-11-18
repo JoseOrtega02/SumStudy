@@ -12,9 +12,9 @@ import { IDSummarySchemaValidation } from 'src/summary/Infra/Validations/IDSchem
 import { UploadSummarySchemaValidation } from 'src/summary/Infra/Validations/UploadSchemaValidation'
 
 export class SummaryController {
-  public async getAllSumaries(repositoryInstance: IsummaryRepo<Summary>, limit: string) {
-    const useCase = new getAllSummariesUC(repositoryInstance, limit)
-    const items = useCase.getAllSumaries()
+  public async getAllSumaries(repositoryInstance: IsummaryRepo<Summary>, limit: string, offset: string) {
+    const useCase = new getAllSummariesUC(repositoryInstance)
+    const items = useCase.getAllSumaries(limit, offset)
     return await items
   }
   public async searchSummaries(name: string, repositoryInstance: IsummaryRepo<Summary>) {
