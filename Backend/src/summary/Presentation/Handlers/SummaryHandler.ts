@@ -11,6 +11,7 @@ export function SummaryHandler() {
   router.get('/', (req, res) => {
     let name: string
     let limit = req.query.limit || 10
+    let offset = req.query.offset || 0
     if (typeof req.query.searchTerm === 'string') {
       name = req.query.searchTerm
     } else {
@@ -21,7 +22,7 @@ export function SummaryHandler() {
     if (name !== '') {
       paginator = controller.searchSummaries(name, repositoryInstance)
     } else {
-      paginator = controller.getAllSumaries(repositoryInstance, limit.toString())
+      paginator = controller.getAllSumaries(repositoryInstance, limit.toString(), offset.toString())
     }
     paginator.then((paginator) => {
       res.json(paginator)

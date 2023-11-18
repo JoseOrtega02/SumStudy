@@ -3,7 +3,7 @@ import { Summary } from '../../Domain/Entities/Summary'
 
 export class getAllSummariesUC {
   constructor(private readonly repository: IsummaryRepo<Summary>) {}
-  getAllSumaries(limit: string) {
-    return this.repository.getAll(limit)
+  getAllSumaries(limit: string, offset: string) {
+    return this.repository.getAll(limit, offset)
   }
 }
