@@ -3,6 +3,9 @@ import { IsummaryRepo } from 'src/summary/Infra/Repositories/IsummaryRepo'
 import SummaryRepository from 'src/summary/Infra/Repositories/SummaryRepository'
 import express from 'express'
 import { SummaryController } from '../Controllers/SummaryController'
+import { ILikesRepository } from 'src/summary/Infra/Repositories/ILikesRepository'
+import LikeRepository from 'src/summary/Infra/Repositories/LikesRepository'
+import { LikeController } from '../Controllers/LikeController'
 export function SummaryHandler() {
   const repositoryInstance: IsummaryRepo<Summary> = new SummaryRepository()
   const controller = new SummaryController()
@@ -75,5 +78,6 @@ export function SummaryHandler() {
       else res.json(paginator)
     })
   })
+
   return router
 }
