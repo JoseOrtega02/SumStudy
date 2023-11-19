@@ -5,7 +5,7 @@ export class Summary implements Isummary {
   constructor(data: Isummary) {
     this.name = data.name
     this.id = data.id
-    this.likes = data.likes
+
     this.pdf = data.pdf
     this.sum_desc = data.sum_desc
     this.subject = data.subject
@@ -16,7 +16,7 @@ export class Summary implements Isummary {
   }
   name: string
   id: UUID
-  likes: number
+
   pdf: string
   sum_desc: string
   subject: string

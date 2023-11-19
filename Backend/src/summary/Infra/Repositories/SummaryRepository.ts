@@ -17,13 +17,13 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
   }
   async getAll(limit: string, offset: string) {
     const sql =
-      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries LIMIT ? OFFSET ?;'
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,author_Id FROM Summaries LIMIT ? OFFSET ?;'
     const [rows] = await connection.execute<RowDataPacket[]>(sql, [limit, offset])
     return rows
   }
   async searchSummaries(name: string) {
     const sql =
-      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE name LIKE ?;'
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,author_Id FROM Summaries WHERE name LIKE ?;'
     const values = [`%${name}%`]
     const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
     return rows
@@ -31,14 +31,14 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
 
   async getSummariesByAuthorId(id: string) {
     const sql =
-      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE author_Id = (?);'
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,author_Id FROM Summaries WHERE author_Id = (?);'
     const values = [id]
     const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
     return rows
   }
   async create(sumary: Summary) {
     const sql =
-      'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id) VALUES(UUID_TO_BIN(?), ?,?, ?, ?, ?, ?, ?, ?,?);'
+      'INSERT INTO Summaries(id,name,lenght,up_date,sum_desc,pdf,career,subject,author_Id) VALUES(UUID_TO_BIN(?), ?,?, ?, ?, ?, ?, ?, ?,?);'
     const values = [
       sumary.id,
       sumary.name,
@@ -48,14 +48,13 @@ export default class SummaryRepository implements IsummaryRepo<Summary> {
       sumary.pdf,
       sumary.career,
       sumary.subject,
-      sumary.likes,
       sumary.author_Id
     ]
     await connection.execute(sql, values)
   }
   async getOne(id: string) {
     const sql =
-      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,likes,author_Id FROM Summaries WHERE id = UUID_TO_BIN(?);'
+      'SELECT BIN_TO_UUID(id) as id,name,lenght,up_date,sum_desc,pdf,career,subject,author_Id FROM Summaries WHERE id = UUID_TO_BIN(?);'
     const values = [id]
     const [rows] = await connection.execute<RowDataPacket[]>(sql, values)
 
